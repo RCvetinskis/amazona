@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "cd amazona_back && npm install  && cd ../amazona_front && npm install && npm run build",
+    "build": "cd amazona_back && npm install --force  && cd ../amazona_front && npm install --force && npm run build",
     "start": "node amazona_back/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
