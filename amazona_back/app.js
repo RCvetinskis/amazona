@@ -15,6 +15,12 @@ mongoose
     console.log(e.message);
   });
 
+app.listen(port, () => {
+  console.log(`serve at http://localhost:${port}`);
+});
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 app.use("/", mainRouter);
 
 // serves frontend build folder
@@ -22,9 +28,3 @@ app.use(express.static(path.join(__dirname, "../amazona_front/build")));
 app.get("*", (req, res) =>
   res.sendFile(path.join(__dirname, "../amazona_front/build/index.html"))
 );
-
-app.listen(port, () => {
-  console.log(`serve at http://localhost:${port}`);
-});
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));

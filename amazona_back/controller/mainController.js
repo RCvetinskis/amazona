@@ -12,15 +12,14 @@ module.exports = {
     const createdProducts = await Product_db.insertMany(products);
     await User_db.deleteMany({});
     const createdUsers = await User_db.insertMany(users);
-    const productsAndUsers = {
-      products: createdProducts,
-      users: createdUsers,
-    };
-    return response(res, "products and users created", false, productsAndUsers);
+
+    res.send({ createdProducts, createdUsers });
   },
   apiProducts: async (req, res) => {
     const products = await Product_db.find();
-    return response(res, "data products was sent", false, products);
+    console.log("asdas");
+    console.log(products);
+    res.send(products);
   },
   singleProduct: async (req, res) => {
     const product = await Product_db.findOne({ slug: req.params.slug });
