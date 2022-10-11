@@ -18,9 +18,9 @@ mongoose
 app.use("/", mainRouter);
 
 // serves frontend build folder
-app.use(express.static(path.join(__dirname, "/amazona_front/build")));
+app.use(express.static(path.join(__dirname, "../amazona_front/build")));
 app.get("*", (req, res) =>
-  res.sendFile(path.join(__dirname, "/amazona_front/build/index.html"))
+  res.sendFile(path.join(__dirname, "../amazona_front/build/index.html"))
 );
 
 app.listen(port, () => {
