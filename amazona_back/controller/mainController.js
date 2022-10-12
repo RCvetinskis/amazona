@@ -6,6 +6,8 @@ const Product_db = require("../schemas/productSchema");
 const { generateToken } = require("../utils");
 const bcrypt = require("bcrypt");
 
+const PAGE_SIZE = 3;
+
 module.exports = {
   productsUsersFromData: async (req, res) => {
     await Product_db.deleteMany({});
@@ -17,8 +19,7 @@ module.exports = {
   },
   apiProducts: async (req, res) => {
     const products = await Product_db.find();
-    console.log("asdas");
-    console.log(products);
+
     res.send(products);
   },
   singleProduct: async (req, res) => {
@@ -135,7 +136,7 @@ module.exports = {
   mineOrder: async (req, res) => {
     // returns orders of current user
     const orders = await Order_Db.find({ user: req.user._id });
-    console.log(orders);
+
     res.send(orders);
   },
   changeAccDetails: async (req, res) => {
@@ -157,5 +158,85 @@ module.exports = {
     } else {
       res.status(404).send({ message: "user not found" });
     }
+  },
+  sendCategories: async (req, res) => {
+    // distinct method gets only category products from db
+    const categories = await Product_db.find().distinct("category");
+    res.send(categories);
+  },
+
+  searchProducts: async (req, res) => {
+    const { query } = req;
+    const pageSize = query.pageSize || PAGE_SIZE;
+    const page = query.page || 1;
+    const category = query.category || "";
+    const price = query.price || "";
+    const rating = query.rating || "";
+    const order = query.order || "";
+    const searchQuery = query.query || "";
+
+    const queryFilter =
+      searchQuery && searchQuery !== "all"
+        ? {
+            name: {
+              $regex: searchQuery,
+              $options: "i",
+            },
+          }
+        : {};
+    const categoryFilter = category && category !== "all" ? { category } : {};
+    const ratingFilter =
+      rating && rating !== "all"
+        ? {
+            rating: {
+              $gte: Number(rating),
+            },
+          }
+        : {};
+    const priceFilter =
+      price && price !== "all"
+        ? {
+            // 1-50
+            price: {
+              $gte: Number(price.split("-")[0]),
+              $lte: Number(price.split("-")[1]),
+            },
+          }
+        : {};
+    const sortOrder =
+      order === "featured"
+        ? { featured: -1 }
+        : order === "lowest"
+        ? { price: 1 }
+        : order === "highest"
+        ? { price: -1 }
+        : order === "toprated"
+        ? { rating: -1 }
+        : order === "newest"
+        ? { createdAt: -1 }
+        : { _id: -1 };
+
+    const products = await Product_db.find({
+      ...queryFilter,
+      ...categoryFilter,
+      ...priceFilter,
+      ...ratingFilter,
+    })
+      .sort(sortOrder)
+      .skip(pageSize * (page - 1))
+      .limit(pageSize);
+
+    const countProducts = await Product_db.countDocuments({
+      ...queryFilter,
+      ...categoryFilter,
+      ...priceFilter,
+      ...ratingFilter,
+    });
+    res.send({
+      products,
+      countProducts,
+      page,
+      pages: Math.ceil(countProducts / pageSize),
+    });
   },
 };

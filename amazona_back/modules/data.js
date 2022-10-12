@@ -44,7 +44,7 @@ const data = {
     {
       name: "Nike Slim pant",
       slug: "nike-slim-pant",
-      category: "Shirts",
+      category: "Pants",
       image:
         "https://themes.webberwebber.com/time/files/2014/01/231178-0092_2-364x485.jpeg",
       price: 120,
@@ -57,7 +57,7 @@ const data = {
     {
       name: "Adidas Slim pants",
       slug: "adidas-slim-pant",
-      category: "Shirts",
+      category: "Pants",
       image:
         "https://lores.pl/wp-content/uploads/2021/09/strutture1-364x485.jpg",
       price: 50,
