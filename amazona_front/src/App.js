@@ -27,6 +27,9 @@ import { getError } from "./utils";
 import axios from "axios";
 import SearchBox from "./componenets/SearchBox";
 import SearchScreen from "./screens/SearchScreen";
+import ProtectedRoute from "./componenets/ProtectedRoute";
+import DashBoardScreen from "./screens/DashBoardScreen";
+import AdminRoute from "./componenets/AdminRoute";
 
 function App() {
   const { state, dispatch: ctxDispatch } = useContext(StoreContext);
@@ -46,7 +49,7 @@ function App() {
     const fetchCatgegories = async () => {
       try {
         const { data } = await axios.get(`/api/categories`);
-        console.log(data);
+
         setCategories(data);
       } catch (err) {
         toast.error(getError(err));
@@ -60,7 +63,7 @@ function App() {
       <div
         className={
           sideBarIsOpen
-            ? "d-flex flex-column site-container active-cont"
+            ? "d-flex flex-column site-container  active-cont full-box"
             : "d-flex flex-column site-container"
         }
       >
@@ -74,8 +77,8 @@ function App() {
               >
                 <i className="fas fa-bars"></i>
               </Button>
-              <LinkContainer to="/">
-                <Navbar.Brand>amazona</Navbar.Brand>
+              <LinkContainer className="m-1 " to="/">
+                <Navbar.Brand className="robinzona">RobinZona</Navbar.Brand>
               </LinkContainer>
               <Navbar.Toggle aria-controls="basic-navbar-nav" />
               <Navbar.Collapse id="basic-navbar-nav">
@@ -111,6 +114,23 @@ function App() {
                     <Link className="nav-link" to="/signin">
                       Sign In
                     </Link>
+                  )}
+
+                  {userInfo && userInfo.isAdmin && (
+                    <NavDropdown title="Admin" id="admin-nav-dropdown">
+                      <LinkContainer to="/admin/dashboard">
+                        <NavDropdown.Item>Dashboard</NavDropdown.Item>
+                      </LinkContainer>
+                      <LinkContainer to="/admin/productlist">
+                        <NavDropdown.Item>Products</NavDropdown.Item>
+                      </LinkContainer>
+                      <LinkContainer to="/admin/orderlist">
+                        <NavDropdown.Item>Orders</NavDropdown.Item>
+                      </LinkContainer>
+                      <LinkContainer to="/admin/userList">
+                        <NavDropdown.Item>Users</NavDropdown.Item>
+                      </LinkContainer>
+                    </NavDropdown>
                   )}
                 </Nav>
               </Navbar.Collapse>
@@ -148,18 +168,49 @@ function App() {
               <Route path="/search" element={<SearchScreen />}></Route>
               <Route path="/signin" element={<LoginScreen />}></Route>
               <Route path="/signup" element={<SignUpScreen />}></Route>
-              <Route path="/profile" element={<ProfileScreen />}></Route>
+
+              <Route
+                path="/profile"
+                element={
+                  <ProtectedRoute>
+                    <ProfileScreen />
+                  </ProtectedRoute>
+                }
+              ></Route>
+
               <Route path="/placeorder" element={<PlaceOrderScreen />}></Route>
-              <Route path="/order/:id" element={<OrderScreen />}></Route>
+              <Route
+                path="/order/:id"
+                element={
+                  <ProtectedRoute>
+                    <OrderScreen />
+                  </ProtectedRoute>
+                }
+              ></Route>
               <Route
                 path="/orderhistory"
-                element={<OrderHistoryScreen />}
+                element={
+                  <ProtectedRoute>
+                    <OrderHistoryScreen />
+                  </ProtectedRoute>
+                }
               ></Route>
               <Route
                 path="/shipping"
                 element={<ShippingAdressScreen />}
               ></Route>
               <Route path="/payment" element={<PaymentMethodScreen />}></Route>
+
+              {/* admin routes */}
+
+              <Route
+                path="/admin/dashboard"
+                element={
+                  <AdminRoute>
+                    <DashBoardScreen />
+                  </AdminRoute>
+                }
+              ></Route>
               <Route path="/" element={<HomeScreen />}></Route>
             </Routes>
           </Container>

@@ -1,12 +1,8 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
 
+.robinzona:hover{
+  cursor: pointer;
+  color: #ffb703;
+}
 .site-container{
   min-height: 100vh;
 }
@@ -17,7 +13,7 @@ main{
 }
 
 .btn-primary, .btn-outline-primary{
-  background-color: #f0c040;
+  background-color: #ffb703;
   color: #000000;
  
 
@@ -93,3 +89,20 @@ main{
 .active-nav{
   left: 0;
 }
+.text-bold{
+  font-weight: bold;
+}
+
+
+header{
+  width: 100%!important;
+}
+
+@media screen and (max-width: 767px) {
+  .table-responsive {
+      width: 100%;
+      margin-bottom: 15px;
+      overflow-y: hidden;
+      -ms-overflow-style: -ms-autohiding-scrollbar;
+   
+  }}
