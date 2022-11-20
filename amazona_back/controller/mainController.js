@@ -58,16 +58,12 @@ module.exports = {
   },
   userSignUp: async (req, res) => {
     const { name, password, email } = req.body;
-    const checkUser = await User_db.findOne({ email });
     const newUser = new User_db({
       name,
       email,
       password: bcrypt.hashSync(password, 10),
     });
 
-    if (name.includes(checkUser)) {
-      return response(res, "use already exists", true);
-    }
     const user = await newUser.save();
     const thisUser = {
       _id: user._id,

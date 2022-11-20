@@ -17,13 +17,14 @@ const {
   searchProducts,
 } = require("../controller/mainController");
 const { isAuth } = require("../middleware/isAuth");
+const { validateRegistration } = require("../middleware/loginAuth");
 
 router.get("/api/seed", productsUsersFromData);
 router.get("/api/products", apiProducts);
 router.get("/api/products/slug/:slug", singleProduct);
 router.get("/api/products/:id", productId);
 router.post("/api/signin", usersSignIn);
-router.post("/api/signup", userSignUp);
+router.post("/api/signup", validateRegistration, userSignUp);
 router.post("/api/orders", isAuth, orders);
 router.get("/api/orders/mine", isAuth, mineOrder);
 router.get("/api/orders/:id", isAuth, showOrderStatus);
